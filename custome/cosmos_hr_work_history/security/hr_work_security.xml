@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+	    
+	    <!-- Các rule cho Lịch sử  nghỉ việc của nhân viên -->
+		<record id="cosmos_work_history_leave_global" model="ir.rule">
+	        <field name="name">Lịch sử  nghỉ việc của nhân viên - Xem theo công ty - Toàn cục</field>
+	        <field name="model_id" ref="model_cosmos_work_history_leave"/>
+	        <field name="domain_force"><![CDATA[
+	        	[
+				'|','|',('employee_id.company_id','child_of',[p.id for p in user.company_ids]),
+				('employee_id.company_id','=',user.company_id.id),
+				('employee_id.company_id','child_of',[user.company_id.id])
+				]
+	         ]]></field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="0" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="global" eval="True"/>
+	    </record>
+		
+		<record id="cosmos_work_history_leave_create" model="ir.rule">
+	        <field name="name">Lịch sử nghỉ việc của nhân viên - Tạo</field>
+	        <field name="model_id" ref="model_cosmos_work_history_leave"/>
+	        <field name="domain_force">[(1,'=',1)]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="0" name="perm_write"/>
+	        <field eval="0" name="perm_read"/>
+	        <field eval="1" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+	    </record>
+	    
+	    <record id="cosmos_work_history_leave_create_uid_draft" model="ir.rule">
+	    	<field name="name">Lịch sử làm việc của nhân viên - Người tạo - Dự thảo</field>
+	    	<field name="model_id" ref="model_cosmos_work_history_leave"/>
+	    	<field name="domain_force">[('create_uid','=',user.id),('state','=','draft')]</field>
+	    	<field eval="1" name="perm_unlink"/>
+	    	<field eval="1" name="perm_write"/>
+	    	<field eval="1" name="perm_read"/>
+	    	<field eval="1" name="perm_create"/>
+	    	<field name="groups" eval="[(4, ref('base.group_user'))]"/>
+	    </record>
+	    
+	    <record id="cosmos_work_history_leave_uid_save_read" model="ir.rule">
+	    	<field name="name">Lịch sử nghỉ việc của nhân viên - Người tạo - Lưu hồ sơ</field>
+	    	<field name="model_id" ref="model_cosmos_work_history_leave"/>
+	    	<field name="domain_force">[('create_uid','=',user.id),('state','=','save')]</field>
+	    	<field eval="0" name="perm_unlink"/>
+	    	<field eval="0" name="perm_write"/>
+	    	<field eval="1" name="perm_read"/>
+	    	<field eval="0" name="perm_create"/>
+	    	<field name="groups" eval="[(4, ref('base.group_user'))]"/>
+	    </record>
+	    
+	    <record id="cosmos_work_history_leave_employee_manager" model="ir.rule">
+	        <field name="name">Lịch sử nghỉ việc của nhân viên - Nhân viên quản lý nhân sự</field>
+	        <field name="model_id" ref="model_cosmos_work_history_leave"/>
+	        <field name="domain_force">[('state','=','save')]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="0" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_manager_employee'))]"/>
+	    </record>
+	    
+	    <record id="cosmos_work_history_leave_human_manager" model="ir.rule">
+	        <field name="name">Lịch sử nghỉ việc của nhân viên - Nhân sự/Quản lý</field>
+	        <field name="model_id" ref="model_cosmos_work_history_leave"/>
+	        <field name="domain_force">[('state','=','save')]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="0" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_hr_manager'))]"/>
+	    </record>
+	    
+	    <!-- Các rule cho Quản lý lịch sử làm việc của nhân viên -->
+	    <record id="cosmos_cosmos_work_history_create" model="ir.rule">
+	        <field name="name">Quản lý lịch sử làm việc của nhân viên - Tạo mới</field>
+	        <field name="model_id" ref="model_cosmos_work_history"/>
+	        <field name="domain_force">[(1,'=',1)]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="0" name="perm_write"/>
+	        <field eval="0" name="perm_read"/>
+	        <field eval="1" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+	    </record>
+	    
+	    <record id="cosmos_work_history_create_uid_draft1" model="ir.rule">
+	        <field name="name">Quản lý lịch sử làm việc của nhân viên - Người tạo - Dự thảo</field>
+	        <field name="model_id" ref="model_cosmos_work_history"/>
+	        <field name="domain_force">[('create_uid','=',user.id),('state','=','draft')]</field>
+	        <field eval="1" name="perm_unlink"/>
+	        <field eval="1" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="1" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+	    </record>
+	    
+	    <record id="cosmos_work_history_create_uid_waitappro" model="ir.rule">
+	        <field name="name">Quản lý lịch sử làm việc của nhân viên - Người tạo - Chờ duyệt</field>
+	        <field name="model_id" ref="model_cosmos_work_history"/>
+	        <field name="domain_force">[('create_uid','=',user.id),('state','=','waitappro')]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="1" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+	    </record>
+	    
+	    <record id="cosmos_work_history_create_uid_appro" model="ir.rule">
+	        <field name="name">Quản lý lịch sử làm việc của nhân viên - Người tạo - Đã duyệt</field>
+	        <field name="model_id" ref="model_cosmos_work_history"/>
+	        <field name="domain_force">[('create_uid','=',user.id),('state','=','appro')]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="0" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+	    </record>
+	    
+	    <record id="cosmos_work_history_create_uid_reject" model="ir.rule">
+	        <field name="name">Quản lý lịch sử làm việc của nhân viên - Người tạo - Đã từ chối</field>
+	        <field name="model_id" ref="model_cosmos_work_history"/>
+	        <field name="domain_force">[('create_uid','=',user.id),('state','=','reject')]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="1" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+	    </record>
+	    <!-- Những người có thẩm quyền phê duyệt -->
+	    <record id="cosmos_work_history_current_approver_list" model="ir.rule">
+	        <field name="name">Quản lý lịch sử làm việc của nhân viên - Người có thẩm quyền phê duyệt- xem, sửa</field>
+	        <field name="model_id" ref="model_cosmos_work_history"/>
+	        <field name="domain_force">[('state','=','waitappro'), ('current_approver_list', 'in', [user.id])]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="1" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+	    </record>
+	    
+	    <!-- Những người thuộc nhóm Nhân viên quản lý nhân sự -->
+	    <record id="cosmos_work_history_manager_employee" model="ir.rule">
+	        <field name="name">Quản lý lịch sử làm việc của nhân viên - Nhân viên quản lý nhân sự - xem</field>
+	        <field name="model_id" ref="model_cosmos_work_history"/>
+	        <field name="domain_force">[('state','=','appro')]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="0" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_manager_employee'))]"/>
+	    </record>
+	    
+	    <!-- Những người thuộc Nhânsự/ Quản lý -->
+	    <record id="cosmos_work_history_hr_manager" model="ir.rule">
+	        <field name="name">Quản lý lịch sử làm việc của nhân viên - Nhânsự/ Quản lý - xem</field>
+	        <field name="model_id" ref="model_cosmos_work_history"/>
+	        <field name="domain_force">[('state','=','appro')]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="0" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_hr_manager'))]"/>
+	    </record>
+	    
+	    <!-- Những người thuộc người theo dõi -->
+	    <record id="cosmos_work_history_create_uid_waiting" model="ir.rule">
+	        <field name="name">Quản lý lịch sử làm việc của nhân viên - người theo dõi - xem</field>
+	        <field name="model_id" ref="model_cosmos_work_history"/>
+	        <field name="domain_force">[('message_follower_ids','in',[user.partner_id.id])]</field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="1" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+	    </record>
+	    
+		<record id="cosmos_work_history_global" model="ir.rule">
+	        <field name="name">Quản lý các thay đổi nhân sự - Xem theo công ty - Toàn cục</field>
+	        <field name="model_id" ref="model_cosmos_work_history"/>
+	        <field name="domain_force"><![CDATA[
+	        	[
+				'|','|',('employee_id.company_id','child_of',[p.id for p in user.company_ids]),
+				('employee_id.company_id','=',user.company_id.id),
+				('employee_id.company_id','child_of',[user.company_id.id])
+				]
+	         ]]></field>
+	        <field eval="0" name="perm_unlink"/>
+	        <field eval="0" name="perm_write"/>
+	        <field eval="1" name="perm_read"/>
+	        <field eval="0" name="perm_create"/>
+	        <field name="global" eval="True"/>
+	    </record>
+		
+	</data>
+</openerp>

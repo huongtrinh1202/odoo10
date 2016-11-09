@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+	<record id="view_convert_number_to_string_form" model="ir.ui.view">
+        <field name="name">convert.number.to.string.form</field>
+        <field name="model">convert.number.to.string</field>
+        <field name="arch" type="xml">
+            <form string="Convert Number To String" class="o_sale_order">
+            <sheet>
+            	<group>
+	                 <field name="name"/>
+	                 <field name="to_string"/>
+                </group>
+            </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
+            </form>
+        </field>
+    </record>
+    
+    <record id="view_convert_number_to_string_tree" model="ir.ui.view">
+        <field name="name">convert.number.to.string.tree</field>
+        <field name="model">convert.number.to.string</field>
+        <field name="priority">4</field>
+        <field name="arch" type="xml">
+            <tree string="Convert Number To String">
+                <field name="name"/>
+                <field name="to_string"/>
+            </tree>
+        </field>
+    </record>
+    
+	<record id="action_convert_number_to_string" model="ir.actions.act_window">
+	    <field name="name">Convert Number To String</field>
+	    <field name="type">ir.actions.act_window</field>
+	    <field name="res_model">convert.number.to.string</field>
+	    <field name="view_type">form</field>
+	    <field name="view_mode">tree,form</field>
+	    <field name="help" type="html"> <p class="oe_view_nocontent_create">Tao moi</p> </field>
+	</record>
+	<menuitem action="action_convert_number_to_string"
+            id="menu_convert_number_to_string" parent="sales_team.menu_sales" sequence="14"/>
+</odoo>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="view_challenge_function_job_form" model="ir.ui.view">
+			<field name="name">view.challenge.function.job.form</field>
+			<field name="model">challenge.function.job</field>
+			<field name="arch" type="xml">
+				<form string="Thử thách chức vụ, vị trí công việc">
+					<header>
+						<field name="state" widget="statusbar"/>
+					</header>
+					<sheet>
+						<group>
+							<group>
+								<field name="employee_id" options="{'no_create': True}" help="Nhân viên"/>
+								<field name="date_from" help="Từ ngày"/>
+								<field name="date_to" help="Đến ngày"/>
+								<field name="times_challenge" help="Lần thử thách"/>
+							</group>
+							<group>
+								<field name="job_id" options="{'no_create': True}" help="Vị trí thử thách"/>
+								<field name="fuction_id" options="{'no_create': True}" help="Chức vụ thử thách"/>
+								<field name="level_allowance" options="{'no_create': True}" help="Mức phụ cấp trách nhiệm" context="{'form_view_ref': 'view_level_allowance_bonus_form'}"/>
+							</group>
+						</group>
+						<label for="note"/>
+						<field name="note" help="Ghi chú" nolabel="1"/>
+					</sheet>
+					<div class="oe_chatter">
+		                <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+		                <field name="message_ids" widget="mail_thread"/>
+		            </div>
+				</form>
+			</field>
+		</record>
+		
+		<record id="view_challenge_function_job_tree" model="ir.ui.view">
+			<field name="name">view.challenge.function.job.tree</field>
+			<field name="model">challenge.function.job</field>
+			<field name="arch" type="xml">
+				<tree string="Thử thách chức vụ, vị trí công việc">
+					<field name="employee_id"/>
+					<field name="job_id"/>
+					<field name="fuction_id"/>
+					<field name="date_from"/>
+					<field name="date_to"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="view_challenge_function_job_filter" model="ir.ui.view">
+			<field name="name">view.challenge.function.job.search</field>
+			<field name="model">challenge.function.job</field>
+			<field name="arch" type="xml">
+				<search string="Thử thách chức vụ, vị trí công việc">
+					<field name="employee_id"/>
+					<field name="job_id"/>
+					<field name="fuction_id"/>
+					<field name="date_from"/>
+					<field name="date_to"/>
+					<field name="state"/>
+					<filter string="Quá hạn chưa đánh giá" domain="[('state','=','effective'),('date_to','&lt;',datetime.datetime.now().strftime('%d-%m-%Y'))]"/>
+					<group expand="0" string="Group By">
+						<filter string="Nhân viên" domain="[]" icon="terp-personal+" context="{'group_by':'employee_id'}"/>
+                		<filter string="Vị trí thử thách" domain="[]" context="{'group_by':'job_id'}"/>
+                		<filter string="Chức vụ thử thách" domain="[]" context="{'group_by':'fuction_id'}"/>
+                		<filter string="Trạng thái" domain="[]" context="{'group_by':'state'}"/>
+                	</group>
+				</search>
+			</field>
+		</record>
+		
+		<record id="action_challenge_function_job" model="ir.actions.act_window">
+			<field name="name">Thử thách chức vụ, vị trí công việc</field>
+			<field name="res_model">challenge.function.job</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="search_view_id" ref="view_challenge_function_job_filter"/>
+		</record>
+		<menuitem action="action_challenge_function_job" id="menu_challenge_function_job" parent="menu_hr_work_history"/>
+	</data>
+</openerp>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_challenge_function_job,challenge_function_job.user,model_challenge_function_job,base.group_user,1,1,1,1
+access_cosmos_times_challenge,cosmos_times_challenge.user,model_cosmos_times_challenge,base.group_user,1,1,1,1
+access_cosmos_work_history_reason_user,cosmos_work_history_reason.user,model_cosmos_work_history_reason,base.group_user,1,1,1,1
+access_cosmos_work_history,cosmos_work_history.user,model_cosmos_work_history,base.group_user,1,1,1,1
+cosmos_work_history_leave_user,cosmos_work_history_leave.user,model_cosmos_work_history_leave,base.group_user,1,1,1,1

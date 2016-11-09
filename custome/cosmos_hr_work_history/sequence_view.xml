@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        
+        <!-- Sequence cho code thay đổi nhân sự -->
+        
+        <record id="seq_code_type_work_history" model="ir.sequence.type">
+        	<field name="name">Mã thay đổi nhân sự</field>
+        	<field name="code">code.work.history</field>
+        </record>
+        
+        <record id="seq_code_work_history" model="ir.sequence">
+        	<field name="name">Mã thay đổi nhân sự</field>
+        	<field name="code">code.work.history</field>
+        	<field name="prefix"><![CDATA[TDNS-%(year)s-]]></field>
+        	<field name="padding">4</field>
+        	<field name="company_id" eval="False"/>
+        	<field name="sequence_auto_reset">1</field>
+        	<field name="sequence_unit_period">year</field>
+        	<field name="sequence_interval_period">1</field>
+        	<field name="sequence_last_reset_time">2016-01-01 00:00:00</field>
+        </record>
+        
+        
+    </data>
+</openerp>

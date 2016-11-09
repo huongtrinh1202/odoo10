@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+	    <record id="view_cosmos_work_history_tree" model="ir.ui.view">
+			<field name="name">cosmos.work.history.tree</field>
+			<field name="model">cosmos.work.history</field>
+			<field name="arch" type="xml">
+				<tree string="Mức độ khen thưởng, kỷ luật">
+					<field name="name" help="Mã"/>
+					<field name="employee_id" help="Nhân viên"/>
+	                <field name="unit_old" help="Đơn vị cũ"/>
+	                <field name="unit_new" help="Đơn vị mới"/>
+	                <field name="possition_old"  help="Chức vụ cũ"/>
+	                <field name="possition_new" help="Chức vụ mới"/>
+	                <field name="date" help="Ngày hiệu lực"/>
+	           		<field name="state" help="Trạng thái"/>
+				</tree>
+			</field>
+		</record>
+		<record id="view_cosmos_work_history_form" model="ir.ui.view">
+			<field name="name">cosmos.work.history.form</field>
+			<field name="model">cosmos.work.history</field>
+			<field name="arch" type="xml">
+				<form string="Mức độ khen thưởng, kỷ luật" editable="bottom">
+					<header>
+						<button name="action_request" string="Gửi yêu cầu" type="object" attrs="{'invisible':['|',('state','!=','draft'),('is_owner','=',False)]}" class="oe_highlight"/>
+						<button name="action_approve" string="Chấp thuận" type="object" attrs="{'invisible':['|',('state','!=','waitappro'),('is_approver','=',False)]}"  class="oe_highlight" confirm="Bạn chắc chắn muốn thực hiện thao tác này ?"/>
+						<button name="action_refuse" string="Từ chối" type="object" attrs="{'invisible':['|',('state','!=','waitappro'),('is_approver','=',False)]}" class="oe_highlight" confirm="Bạn chắc chắn muốn thực hiện thao tác này ?"/>
+						<button name="action_set_draft" string="Thiết lập thành dự thảo" type="object" attrs="{'invisible':['|',('state','!=','reject'),('is_owner','=',False)]}" class="oe_highlight"/>
+						<button name="action_create_contract" string="Tạo/Xem phụ lục hợp đồng" type="object" states="appro" class="oe_highlight"/>
+						<field name="state" widget="statusbar" statusbar_visible="draft,waitappro,appro,reject"/>
+					</header>
+					<sheet>
+						<div class="oe_right oe_button_box" name="button_box">
+							<button name="action_create_decide" string="Tạo/xem quyết định liên quan" class="oe_inline oe_stat_button oe_right" icon="fa-book" type="object" widget="statinfo" attrs="{'invisible':[('create_uid','=',False)]}"/>
+						</div>
+						<group>
+							<group>
+								<field name="name" hepl="Mã"/>
+								<field name="employee_id" options="{'no_create': True}" help="Nhân viên" on_change="onchange_employee_id(employee_id)"/>
+				                <field name="create_uid" help="Người lập"/>
+				                <field name="is_owner" invisible="1"/>
+				                <field name="is_approver" invisible="1"/>
+				                <field name="is_final_approval_level" invisible="1"/>
+				                <field name="current_approver_list" invisible="1"/>
+				                <field name="approve_id" invisible="1"/>
+				                <field name="approve_date" invisible="1"/>
+							</group>
+							<group>
+								<field name="possition_appro" options="{'no_create': True}" help="Thẩm quyền duyệt"/>
+			                	<field name="create_date" help="Ngày nhập"/>
+			                	<field name="date" help="Ngày hiệu lực"/>
+							</group>
+						</group>
+						<group>
+							<group string="Vị trí, chức vụ, đơn vị, mức lương cũ">
+								<field name="unit_old" help="Đơn vị cũ"/>
+				                <field name="company_old" help="Công ty cũ"/>
+				                <field name="possition_old" help="Chức vụ cũ"/>
+				                <field name="job_pri_old"  help="vị trí công việc chính cũ"/>
+				                <field name="job_ids_old"  help="Vị trí kiêm nghiệm công việc cũ" widget="many2many_tags"/>
+				                <field name="salarylevel_old" help="Mức lương cũ"/>
+							</group>
+							<group string="Vị trí, chức vụ, đơn vị, mức lương mới">
+								<field name="unit_new" options="{'no_create': True}" help="Đơn vị mới"/>
+			                	<field name="company_new" options="{'no_create': True}" help="Công ty mới"/>
+			                	<field name="possition_new" options="{'no_create': True}" help="Chức vụ mới"/>
+			                	<field name="job_pri_new" options="{'no_create': True}"  help="Vị trí công việc chính mới" on_change="onchange_job_id(job_pri_new)"/>
+			                	<field name="job_ids_new" options="{'no_create': True}"  help="Vị trí kiêm nghiệm công việc mới" widget="many2many_tags"/>
+			                	<field name="salarylevel_new" options="{'no_create': True}" help="Mức lương mới"/>
+							</group>
+						</group>
+						<group string="Tùy chọn khác">
+							<group>
+								<field name="temporary_transfers" help="Là điều chuyển tạm thời"/>
+								<field name="related_id" options="{'no_create': True}" help="Thay thế cho" attrs="{'invisible':[('temporary_transfers','!=',True)], 'required':[('temporary_transfers','=',True)]}"/>
+							</group>
+							<group>
+								<field name="date_expire" help="Ngày hết hiệu lực" attrs="{'invisible':[('temporary_transfers','!=',True)], 'required':[('temporary_transfers','=',True)]}"/>
+							</group>
+						</group>
+					</sheet>
+					<div class="oe_chatter">
+		               <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+		               <field name="message_ids" widget="mail_thread"/>
+			        </div>
+				</form>
+			</field>
+		</record>
+		<record id="view_cosmos_work_history_filter" model="ir.ui.view">
+            <field name="name">cosmos.work.history.select</field>
+            <field name="model">cosmos.work.history</field>
+            <field name="arch" type="xml">
+                <search string="Mức độ khen thưởng, kỷ luật">
+                	<field name="name"/>
+					<field name="employee_id"/>
+	                <field name="date"/> 
+	                <field name="unit_old"/>
+	                <field name="unit_new"/>
+	                <field name="possition_old"/>
+	                <field name="possition_new"/>
+	                <field name="state"/>
+	                <filter string = "Dự thảo" domain = "[('state', '=' , 'draft')]"/>
+	                <filter string = "Chờ xác nhận" domain = "[('state', '=' , 'waitting_confirm')]"/>
+	                <filter string = "Chờ duyệt" domain = "[('state', '=' , 'waitappro')]"/>
+	                <filter string = "Đã duyệt" domain = "[('state', '=' , 'appro')]"/>
+	                <filter string = "Đã từ chối" domain = "[('state', '=' , 'reject')]"/>
+                  	<group expand="0" string="Group By">
+                        <filter string="Công ty cũ" domain="[]" context="{'group_by':'company_old'}"/>
+                        <filter string="Công ty mới" domain="[]" context="{'group_by':'company_new'}"/>
+                        <filter string="Đơn vị cũ" domain="[]" context="{'group_by':'unit_old'}"/>
+                        <filter string="Đơn vị mới" domain="[]" context="{'group_by':'unit_new'}"/>
+                        <filter string="Trạng thái" domain="[]" context="{'group_by':'state'}"/>
+                	</group>
+                    
+               </search>
+            </field>
+        </record>
+		<record id="action_cosmos_work_history_change" model="ir.actions.act_window">
+            <field name="res_model">cosmos.work.history</field>
+            <field name="name">Các thay đổi nhân sự</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_cosmos_work_history_filter"/>
+        </record>
+<!-- Quan lý nghỉ việc -->
+         <record id="view_cosmos_work_history_leave_tree" model="ir.ui.view">
+			<field name="name">cosmos.work.history.leave.tree</field>
+			<field name="model">cosmos.work.history.leave</field>
+			<field name="arch" type="xml">
+				<tree string="Lịch sử  nghỉ việc của nhân viên">
+					<field name="employee_id" help="Nhân viên"/>
+					<field name="date_out" help="Ngày xin nghỉ"/>
+					 <field name="day_out_begin"  help="Ngày bắt đầu nghỉ"/>
+					<field name="type_leave" help="Loại nghỉ"/>
+	                <field name="reason" help="Lý do nghỉ"/>
+	                <field name="note" help="Ghi chú"/>
+				</tree>
+			</field>
+		</record>
+		<record id="view_cosmos_work_history_leave_form" model="ir.ui.view">
+			<field name="name">cosmos.work.history.leave.form</field>
+			<field name="model">cosmos.work.history.leave</field>
+			<field name="arch" type="xml">
+				<form string="Lịch sử  nghỉ việc của nhân viên">
+				<header>
+					<button name="action_save" string="Lưu hồ sơ" type="object" states="draft" class="oe_highlight" confirm="Bạn chắc chắn muốn thực hiện thao tác này ?"/>
+					<field name="state" widget="statusbar" statusbar_visible="draft,save"/>
+				</header>
+					<sheet>
+						<group>
+							<group>
+								<field name="employee_id" options="{'no_create': True}" help="Nhân viên"/>
+								<field name="type_leave" help="Loại nghỉ"/>
+			                </group>
+			                <group>
+			                	<field name="date_out" help="Ngày xin nghỉ"/>
+			                	<field name="day_out_begin"  help="Ngày bắt đầu nghỉ"/>
+			                </group>
+		                </group>
+		                <group>
+							<group>
+								<field name="reason" help="Lý do nghỉ"/>
+	                			<field name="note" help="Ghi chú"/>
+							</group>
+						</group>
+	                </sheet>
+	                 <div class="oe_chatter">
+		               <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+		               <field name="message_ids" widget="mail_thread"/>
+		        </div>
+				</form> 
+			
+			</field>
+		</record>
+		<record id="view_cosmos_work_history_leave_filter" model="ir.ui.view">
+            <field name="name">cosmos.work.history.leave.select</field>
+            <field name="model">cosmos.work.history.leave</field>
+            <field name="arch" type="xml">
+                <search string="Lịch sử  nghỉ  việc của nhân viên">
+                	<field name="employee_id"/>
+					<field name="date_out"/>
+					 <field name="day_out_begin"/>
+					<field name="type_leave"/>
+	                <field name="reason"/>
+	                <field name="state"/>
+	                <group expand="0" string="Group By">
+	                        <filter string="Loại nghỉ" domain="[]" context="{'group_by': 'type_leave'}"/>
+	                        <filter string="Lý do nghỉ" domain="[]" context="{'group_by': 'reason'}"/>
+	                        <filter string="Trạng thái" domain="[]" context="{'group_by': 'state'}"/>
+	                </group>
+               </search>
+            </field>
+        </record>
+		<record id="action_cosmos_work_history_leave" model="ir.actions.act_window">
+            <field name="res_model">cosmos.work.history.leave</field>
+            <field name="name">Lịch sử  nghỉ  việc của nhân viên</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_cosmos_work_history_leave_filter"/>
+        </record>
+         <menuitem name="Lịch sử làm việc" id="menu_hr_work_history" parent="hr.menu_hr_root"/>
+		<menuitem action="action_cosmos_work_history_change" id="menu_hr_work_history_change" parent="menu_hr_work_history"/>
+		<menuitem action="action_cosmos_work_history_leave" id="menu_hr_work_history_leave" parent="menu_hr_work_history"/>
+	</data>
+</openerp>

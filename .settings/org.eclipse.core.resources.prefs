@@ -1,0 +1,14 @@
+eclipse.preferences.version=1
+encoding//addons/account/__init__.py=utf-8
+encoding//addons/account/__manifest__.py=utf-8
+encoding//addons/account/models/account.py=utf-8
+encoding//addons/account/models/account_invoice.py=utf-8
+encoding//addons/account/models/account_payment.py=utf-8
+encoding//addons/account/models/partner.py=utf-8
+encoding//addons/account_accountant/__manifest__.py=utf-8
+encoding//addons/auth_crypt/__manifest__.py=utf-8
+encoding//addons/sale/__manifest__.py=utf-8
+encoding//addons/sale/models/sale.py=utf-8
+encoding//custome/convert_number_to_string/models/convert_number_to_string.py=utf-8
+encoding//custome/sales_custom/__manifest__.py=utf-8
+encoding//custome/sales_custom/models/sale.py=utf-8
